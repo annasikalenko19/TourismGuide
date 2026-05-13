@@ -36,7 +36,7 @@
                </font></Button>
             <ChoiceBox fx:id="choiceBoxFrom" layoutX="149.0" layoutY="15.0" prefWidth="150.0" />
             <ChoiceBox fx:id="choiceBoxTo" layoutX="149.0" layoutY="53.0" prefWidth="150.0" />
-            <Button fx:id="buttonShowMap" layoutX="423.0" layoutY="22.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="122.0" text="Show map">
+            <Button fx:id="buttonShowMap" layoutX="423.0" layoutY="22.0" mnemonicParsing="false" onAction="#showMap" prefHeight="45.0" prefWidth="122.0" text="Show map">
                <font>
                   <Font size="21.0" />
                </font>

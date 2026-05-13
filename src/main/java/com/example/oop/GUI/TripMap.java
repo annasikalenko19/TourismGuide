@@ -55,15 +55,23 @@ public class TripMap extends Application {
         new TripMap("Vinnytsia", "Askania-Nova", 0b1111);
     }
 
+    public static void showMapOnly() {
+        var root = createMapRoot();
+        Scene scene = new Scene(root, 1280, 847);
+        scene.getStylesheets().addAll(Objects.requireNonNull(TripMap.class.getResource("/style/style.css")).toExternalForm());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
+        displayDestinationPositions(root);
+    }
+
     public TripMap(String from, String to, int n) throws PlaceNotSelectedException {
 
 
         if(from==null || to==null){
             throw new PlaceNotSelectedException();
         }
-        var root = new AnchorPane();
-        root.setPrefSize(1280,847);
-        root.setId("pane");
+        var root = createMapRoot();
         Label label = new Label("besfivw");
         root.getChildren().add(label);
         label.setLayoutX(200);
@@ -82,16 +90,7 @@ public class TripMap extends Application {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
-        displayDestinationPosition(root, 653, 283,"Sofiyivka");
-        displayDestinationPosition(root,184,424,"Hoverla");
-        displayDestinationPosition(root,321,368,"Castle");
-        displayDestinationPosition(root,669,561,"Dnieper–Bug estuary");
-        displayDestinationPosition(root,751,569,"Oleshky Sands");
-        displayDestinationPosition(root,683,493,"Aktove canyon");
-        displayDestinationPosition(root,282,163,"Tunnel of Love");
-        displayDestinationPosition(root,212,349,"Synevyr");
-        displayDestinationPosition(root,132,83,"Shatsky");
-        displayDestinationPosition(root,832,581,"Askania");
+        displayDestinationPositions(root);
         var graph = Graph.getInstance();
 
         //displayCafe(root);
@@ -113,6 +112,26 @@ public class TripMap extends Application {
         root.getChildren().add(startTrip);
         startTrip.setLayoutX(112);
         startTrip.setLayoutY(668);
+    }
+
+    private static AnchorPane createMapRoot() {
+        var root = new AnchorPane();
+        root.setPrefSize(1280,847);
+        root.setId("pane");
+        return root;
+    }
+
+    private static void displayDestinationPositions(Pane root) {
+        displayDestinationPosition(root, 653, 283,"Sofiyivka");
+        displayDestinationPosition(root,184,424,"Hoverla");
+        displayDestinationPosition(root,321,368,"Castle");
+        displayDestinationPosition(root,669,561,"Dnieper–Bug estuary");
+        displayDestinationPosition(root,751,569,"Oleshky Sands");
+        displayDestinationPosition(root,683,493,"Aktove canyon");
+        displayDestinationPosition(root,282,163,"Tunnel of Love");
+        displayDestinationPosition(root,212,349,"Synevyr");
+        displayDestinationPosition(root,132,83,"Shatsky");
+        displayDestinationPosition(root,832,581,"Askania");
     }
     private void processStation(){
         synchronized (askStage) {

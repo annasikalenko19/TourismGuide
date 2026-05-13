@@ -41,13 +41,13 @@ public class WelcomePage  implements Initializable {
         logOutButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                changeScene.changeScene(event,"/hello-view.fxml");
+                changeScene.changeScene(event,"/com/example/oop/hello-view.fxml");
             }
         });
         startJourneyButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                ChangeScene.sceneLogIn(event,"/log-in-page.fxml");
+                ChangeScene.sceneLogIn(event,"/com/example/oop/log-in-page.fxml");
             }
         });
     }

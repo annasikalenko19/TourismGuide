@@ -73,7 +73,7 @@ public class HelloController implements Initializable {
 
             signUpButton.getScene().getWindow().hide();
 
-            changeScene.sceneSignUp(actionEvent,"/sign-up-page.fxml");
+            changeScene.sceneSignUp(actionEvent,"/com/example/oop/sign-up-page.fxml");
 
         });
         logInButton.setOnAction(new EventHandler<ActionEvent>() {

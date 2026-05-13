@@ -78,17 +78,23 @@ public class ChooseDestinationController implements Initializable {
             alert.show();;
         }
     }
+    @FXML
+    private void showMap() {
+        TripMap.showMapOnly();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         logOutButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                changeScene.changeScene(event,"/hello-view.fxml");
+                changeScene.changeScene(event,"/com/example/oop/hello-view.fxml");
             }
         });
 
         choiceBoxFrom.getItems().addAll(centers);
         choiceBoxTo.getItems().addAll(destinations);
+        buttonShowMap.setOnAction(event -> showMap());
 
     }
     @FXML

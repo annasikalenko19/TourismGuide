@@ -167,38 +167,57 @@ public class Graph<T> {
             throw new PathBuildingException("Invalid destination location name");
         }
         var to = op.get();
-        // TODO: 08/05/2023 implement  A* Path Finding Algorithm
-        return new ArrayList<>(TripMap.NUMBER_OF_CENTERS + 1) {{
-            var curr = from;
-            do {//lambda
-                // find edge with in H value
-                var finalCurr = curr;
-                var minEdge = curr.edges.stream()
-                        .filter(edge -> {
-                            var node = edge.first == finalCurr ? edge.second : edge.first;
-                            return node == to || !node.isDestination;
-                        })
-                        .max((a, b) -> {
-                            if (a.first == to || a.second == to)  {
-                                return 1;
-                            }
-                            if (b.first == to || b.second == to) {
-                                return -1;
-                            }
-                            double aH = a.first == finalCurr ? a.second.calcHValue(a.first, to) : a.first.calcHValue(a.second, to);
-                            double bH = b.first == finalCurr ? b.second.calcHValue(b.first, to) : b.first.calcHValue(b.second, to);
-                            return aH - bH < 0 ? -1 : (Math.abs(aH - bH) < 0.001 ? 0 : 1);
-                        });
-                if (minEdge.isEmpty()) {
-                    throw new PathBuildingException(
-                            String.format("there are no edges from Node(%s)\nEdges in the path list yet %s",
-                                    curr.getName(), this));
+
+        Map<Node<T>, Double> distance = new HashMap<>();
+        Map<Node<T>, Edge<T>> previousEdge = new HashMap<>();
+        Set<Node<T>> visited = new HashSet<>();
+        PriorityQueue<Node<T>> queue = new PriorityQueue<>(Comparator.comparingDouble(distance::get));
+
+        for (Node<T> node : nodes) {
+            distance.put(node, Double.MAX_VALUE);
+        }
+        distance.put(from, 0.0);
+        queue.add(from);
+
+        while (!queue.isEmpty()) {
+            Node<T> current = queue.poll();
+            if (!visited.add(current)) {
+                continue;
+            }
+            if (current == to) {
+                break;
+            }
+
+            for (Edge<T> edge : current.edges) {
+                Node<T> next = edge.first == current ? edge.second : edge.first;
+                if (next.isDestination && next != to) {
+                    continue;
                 }
-                var edge = minEdge.get();
-                curr = edge.first == curr ? edge.second : edge.first;
-                add(edge);
-            } while (curr != to);
-        }};
+                double edgeLength = Edge.vectLength(next.x - current.x, next.y - current.y);
+                double newDistance = distance.get(current) + edgeLength;
+                if (newDistance < distance.get(next)) {
+                    distance.put(next, newDistance);
+                    previousEdge.put(next, edge);
+                    queue.add(next);
+                }
+            }
+        }
+
+        if (!previousEdge.containsKey(to)) {
+            throw new PathBuildingException("Path was not found");
+        }
+
+        LinkedList<Edge<T>> path = new LinkedList<>();
+        Node<T> current = to;
+        while (current != from) {
+            Edge<T> edge = previousEdge.get(current);
+            if (edge == null) {
+                throw new PathBuildingException("Path was not found");
+            }
+            path.addFirst(edge);
+            current = edge.first == current ? edge.second : edge.first;
+        }
+        return path;
     }
     // TODO: remove method
     public void displayAllStations(Pane pane){
@@ -301,6 +320,9 @@ public class Graph<T> {
         }
 
         public static void addStations(AnchorPane pane, List<? extends Edge<?>> path, int n) {
+            if (path.isEmpty()) {
+                return;
+            }
             List<Integer> stations = new ArrayList<>() {{
                if ((Station.CAFE & n) > 0) add(Station.CAFE);
                if ((Station.EMERGENCY_ROOM & n) > 0) add(Station.EMERGENCY_ROOM);
@@ -310,7 +332,7 @@ public class Graph<T> {
 
             new HashSet<>() {{
                for (int st : stations) {
-                   if (this.size() == path.size() - 1) {
+                   if (path.size() == 1 || this.size() == path.size() - 1) {
                        break;
                    }
                    Edge<?> e;

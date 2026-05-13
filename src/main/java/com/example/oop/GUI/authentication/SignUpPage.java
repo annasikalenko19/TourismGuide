@@ -42,7 +42,7 @@ public class SignUpPage implements Initializable {
                 if(!usernameField.getText().trim().isEmpty() &&  !passwordField.getText().trim().isEmpty() ){
                 dbUtils.signUpUser(event,usernameField.getText(),passwordField.getText());
 
-                changeScene.changeScene(event,"/welcome-page.fxml", usernameField.getText());
+                changeScene.changeScene(event,"/com/example/oop/welcome-page.fxml", usernameField.getText());
                 }else {
                     System.out.println("please,fill in information!");
                     Alert alert = new Alert(Alert.AlertType.ERROR);

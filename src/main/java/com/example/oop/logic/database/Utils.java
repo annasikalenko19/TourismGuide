@@ -88,7 +88,7 @@ public class Utils implements Serializable {
             alert.setContentText("Incorrect login or password!");
             alert.show();
         } else {
-            changeScene.changeScene(event, "/welcome-page.fxml", username);
+            changeScene.changeScene(event, "/com/example/oop/welcome-page.fxml", username);
         }
     }
 
